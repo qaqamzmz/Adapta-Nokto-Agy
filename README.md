@@ -32,15 +32,24 @@ Wallpaper in screenshots is from [Adapta Backgrounds](https://github.com/adapta-
 
 ## Installation
 
-Install by placing the folder in your `~/.themes` directory:
+### Option 1: Archive tar.gz (Recommended)
+Download the `Adapta-Nokto-Agy.tar.gz` archive to your `Downloads` directory, extract it and copy the theme folder to `~/.themes`:
 
 ```bash
-ln -s /home/romain/Documents/themes/Adapta-Nokto-Agy ~/.themes/Adapta-Nokto-Agy
+cd ~/Downloads
+tar -xzf Adapta-Nokto-Agy.tar.gz
+mkdir -p ~/.themes
+cp -r Adapta-Nokto-Agy ~/.themes/
 ```
 
-Select **Adapta-Nokto-Agy** as your Desktop, Controls, and Window Borders in the Cinnamon Themes module.
+### Option 2: Git Clone
+```bash
+git clone https://github.com/qaqamzmz/Adapta-Nokto-Agy.git ~/.themes/Adapta-Nokto-Agy
+```
 
-To allow the GTK2, GTK3 and Metacity1 themes to apply to GUI apps running as root:
+Select **Adapta-Nokto-Agy** as your Desktop, Controls, and Window Borders in the Cinnamon Themes settings module (`cinnamon-settings themes`).
+
+To allow the GTK2, GTK3 and Metacity themes to apply to GUI apps running as root:
 
 ```bash
 sudo mkdir -p /usr/local/share/themes

@@ -26,3 +26,7 @@ __pycache__/
 
 # Logs
 *.log
+
+# Local Project Memory
+PROJECT_MEMORY.md
+*.memory.md
