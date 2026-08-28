@@ -1,0 +1,28 @@
+# OS & Editor files
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+*.bak
+
+# IDE & Editor configurations
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Build and archive artifacts
+*.tar.gz
+*.tar.xz
+*.zip
+build/
+dist/
+.cache/
+
+# Python caches
+__pycache__/
+*.py[cod]
+
+# Logs
+*.log
