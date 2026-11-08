@@ -2,7 +2,7 @@
 if [ ! -t 1 ]; then
     exit
 fi
-THEMENAME="Adapta-Nokto";
+THEMENAME="Adapta-Nokto-Agy";
 DIRECTORY="/home/$USER/.themes/$THEMENAME/cinnamon/";
 MENUDEFAULT=".menu-selected-app-box {}"
 MENUFIX=".menu-selected-app-box {margin-bottom: 1.09em;}"

@@ -2,7 +2,7 @@
 if [ ! -t 1 ]; then
     exit
 fi
-THEMENAME="Adapta-Nokto";
+THEMENAME="Adapta-Nokto-Agy";
 DIRECTORY="/home/$USER/.themes/$THEMENAME/cinnamon/";
 SYSTEMFONT="stage { color: #CFD8DC; font-weight: 400; }";
 SYSTEMFONTDESC="System controlled";
