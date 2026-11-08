@@ -349,6 +349,19 @@ StScrollBar StButton#vhandle:active, StScrollBar StButton#hhandle:active {
   border-image: url("assets/menu/menu.svg") 9 9 9 9;
   color: #E2E8F0;
 }
+
+/* 5. MENU DÉMARRER : coins plus arrondis + ombre accentuée.
+   `.appmenu-background` est posée par menu@cinnamon.org via setCustomStyleClass() et ne
+   concerne que le menu démarrer -- les autres popups gardent menu.svg et ses tranches de 9.
+   Les coins viennent du border-image, pas d'un border-radius : rayon 1,9px -> 9px via un
+   asset dédié en 64x64 découpé en 20. Le padding compense l'encart plus large du corps
+   (10px au lieu de 5,5px) pour que le contenu ne morde pas sur l'arrondi.
+   L'ombre est doublée : le box-shadow St est dessiné À L'EXTÉRIEUR de l'allocation, il
+   porte donc plus loin que l'ombre interne de l'asset. */
+.appmenu-background {
+  border-image: url("assets/menu/appmenu.svg") 30 30 30 30;
+  padding: 10px;
+}
 .popup-menu-arrow,
 .menu-arrow,
 .popup-combo-menu-arrow {
@@ -1757,7 +1770,10 @@ StScrollBar StButton#vhandle:active, StScrollBar StButton#hhandle:active {
 .appmenu-application-button:selected,
 .appmenu-application-button-selected {
   border-color: rgba(56, 189, 248, 0.35);
-  color: #FFFFFF;
+  /* Survol : texte bleu ciel clair plutôt que blanc, pour reprendre la grammaire de la
+     colonne de gauche (fond d'accent translucide + texte de la même famille en plus clair).
+     Colonne applications = famille bleue #7DD3FC ; catégories/places = famille violette #C4B5FD. */
+  color: #7DD3FC;
   background-color: rgba(56, 189, 248, 0.20);
   box-shadow: 0 0 transparent;
   text-shadow: none;
@@ -1844,6 +1860,42 @@ StScrollBar StButton#vhandle:active, StScrollBar StButton#hhandle:active {
   border: 1px solid transparent;
   color: rgba(207, 216, 220, 0.28);
 }
+
+/* 8. OPACITÉ DES ICÔNES DE CATÉGORIE GRISÉES.
+   menu@cinnamon.org lit cette propriété au lieu de laisser le CSS s'appliquer
+   (applet.js, _setCategoriesButtonActive) :
+       let icon_opacity = icon.get_theme_node().get_double('opacity');
+       if (icon_opacity) icon.set_opacity(icon_opacity * 255);
+   Sans déclaration côté thème, St émet `Did not find double property 'opacity'` -- une
+   alerte par catégorie et par cycle de grisage -- et le garde `if (icon_opacity)` laisse
+   les icônes à pleine intensité : pendant une recherche, les libellés se ternissaient mais
+   pas les icônes. La valeur attendue est une FRACTION 0..1 (l'applet la multiplie par 255).
+   0.3 pour coller au libellé grisé, qui est à 0.28. */
+.menu-category-button-greyed StIcon,
+.appmenu-category-button-greyed StIcon {
+  opacity: 0.3;
+}
+
+/* 4. PLACES DU MENU (Bureau, Téléchargements, Accueil...)
+   On NE peut pas recolorer le glyphe via `color`: les icônes de places de nombreux thèmes
+   (WhiteSur, Breeze...) embarquent leur propre `<style>.ColorScheme-Text{color:#363636}</style>`
+   et figent `currentColor` -- convention KDE que GTK/St ne réécrit pas. Le glyphe reste donc
+   sombre sur fond sombre, invisible.
+   Solution indépendante du thème d'icônes : une pastille d'accent DERRIÈRE l'icône. Le glyphe
+   garde la couleur héritée du libellé, donc le contraste marche dans les deux cas (glyphe
+   sombre d'un thème clair, ou glyphe clair d'un thème sombre). Bleu ciel #38BDF8 = bouton Réduire. */
+.menu-places-box .menu-sidebar-button StIcon,
+.appmenu-places-box .appmenu-sidebar-button StIcon {
+  background-color: #38BDF8;
+  border-radius: 6px;
+}
+/* Au survol la pastille garde son bleu : la ligne prend son fond violet et le libellé
+   passe en violet clair, le retour visuel est déjà là. Une pastille bleu clair sur une
+   ligne violette jurait, et une pastille blanche masquerait un glyphe clair. */
+.menu-places-box .menu-sidebar-button-greyed StIcon,
+.appmenu-places-box .appmenu-sidebar-button-greyed StIcon {
+  background-color: rgba(56, 189, 248, 0.25);
+}
 .menu-sidebar-button-label:ltr, .menu-category-button-label:ltr,
 .appmenu-sidebar-button-label:ltr,
 .appmenu-category-button-label:ltr {
@@ -1895,8 +1947,29 @@ StScrollBar StButton#vhandle:active, StScrollBar StButton#hhandle:active {
 .appmenu-search-box {
   spacing: 10px;
 }
+/* 6. PHOTO DE PROFIL RONDE.
+   L'Avatar de Cinnamon est un St.Bin qui pose en style inline
+   `background-image: url(...); background-size: cover` -- St clippe les images de fond au
+   rayon de bordure, donc un border-radius suffit à obtenir un disque. Le style inline ne
+   déclare pas border-radius, il ne nous écrase donc pas. La règle générique `.user-icon`
+   pose `border-radius: 0` : on la surcharge ici, uniquement pour le menu démarrer.
+   L'avatar mesure 64px dans ce contexte, d'où 32px. */
 .appmenu-sidebar-user-box .user-icon {
-  margin-bottom: 5px;
+  border-radius: 32px;
+  margin-bottom: 2px;
+}
+
+/* 7. SIDEBAR SANS DÉFILEMENT.
+   La colonne de gauche (places + favoris) vit dans un StScrollView dont la barre est masquée
+   par l'applet : quand le contenu dépasse, on doit faire défiler à l'aveugle entre l'avatar
+   et les boutons système. Mesuré : hauteur disponible 277px pour 298px souhaités, soit 21px
+   manquants. On récupère la place sur les paddings verticaux des deux boîtes (le padding
+   horizontal de 7px est conservé), ce qui rend ~28px et laisse une marge. */
+.appmenu-places-box {
+  padding: 0 7px;
+}
+.appmenu-favs-box {
+  padding: 0 7px;
 }
 .appmenu-application-button {
   spacing: 10px;
@@ -1926,7 +1999,6 @@ StScrollBar StButton#vhandle:active, StScrollBar StButton#hhandle:active {
 }
 
 #appmenu-search-entry {
-  width: 100%;
   padding-right: 16px;
   margin-right: 16px;
   border-color: transparent;
@@ -3190,7 +3262,6 @@ StBin.menu StBoxLayout.switcher-list .item-box > StBin.thumbnail {
   box-shadow: 0 0 2px 2px rgb(160, 160, 160);
 }
 
-/*# sourceMappingURL=cinnamon.css.map */
 .menu-selected-app-box {}
 
 /* ==========================================================================

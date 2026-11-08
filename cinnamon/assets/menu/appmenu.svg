@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80" version="1.1">
+  <!--
+    Fond du menu demarrer d'Adapta-Nokto-Agy. Asset distinct de menu.svg (tranches de 9 px,
+    partage par tous les popups du shell) car on veut ici des coins nettement plus arrondis
+    et une ombre plus marquee.
+
+    Contraintes de geometrie, apprises a la mesure :
+      * l'arc doit tenir ENTIEREMENT dans la tranche d'angle, sinon il est etire par la zone
+        de bord -> rayon <= tranche - encart.
+      * St clippe le border-image a l'allocation de l'acteur : le budget d'ombre est donc
+        exactement l'encart du corps, rien ne depasse.
+      * `box-shadow` CSS est IGNORE par St des qu'un border-image est present (verifie : une
+        valeur de 0 30px 40px rgba(0,0,0,0.95) ne change pas un pixel). L'ombre doit donc
+        vivre dans cet asset.
+      * le rect d'ombre doit etre PLUS GRAND que le corps et decale, sinon il reste cache
+        derriere lui et seule la frange du flou depasse.
+      * garder la balise <svg> en tete de fichier : GdkPixbuf sniffe le debut du flux et
+        rejette le fichier si un long commentaire la repousse trop loin.
+
+    Canevas 80x80, tranches 30, corps encarte de 14,5 px, rayon 10 px.
+    .appmenu-background compense par padding: 10px pour que le contenu ne morde pas l'arrondi.
+
+    Licence : CC BY-SA 4.0, comme les autres assets SVG du theme.
+  -->
+  <defs>
+    <linearGradient id="rim" gradientUnits="userSpaceOnUse" x1="40" y1="14" x2="40" y2="66">
+      <stop offset="0" style="stop-color:#2a3a4c;stop-opacity:0.97"/>
+      <stop offset="1" style="stop-color:#1e293b;stop-opacity:0.97"/>
+    </linearGradient>
+    <filter id="drop" x="-0.6" y="-0.6" width="2.2" height="2.2" style="color-interpolation-filters:sRGB">
+      <feGaussianBlur stdDeviation="4.5"/>
+    </filter>
+  </defs>
+  <rect x="13" y="18" width="54" height="52" rx="11" ry="11"
+        style="fill:#000000;fill-opacity:0.70;fill-rule:evenodd;stroke:none;filter:url(#drop)"/>
+  <rect x="14.5" y="14.5" width="51" height="51" rx="10" ry="10"
+        style="fill:#223040;fill-opacity:0.97;fill-rule:evenodd;stroke:url(#rim);stroke-width:1;stroke-miterlimit:4;stroke-opacity:1"/>
+</svg>
