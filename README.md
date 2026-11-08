@@ -26,9 +26,31 @@ Wallpaper in screenshots is from [Adapta Backgrounds](https://github.com/adapta-
 
 ## Customizations in Adapta-Nokto-Agy
 
-- **Window Titlebar & Controls**: Custom hover colors on window control buttons (Minimize: sky blue `#3498db`, Maximize: indigo/purple `#9b59b6`, Close: soft red `#e74c3c`).
-- **Start Menu & Panel**: Softer background dark shades with subtle transparency and enhanced blur integration.
-- **System Buttons**: Customized styling and alignment for Lock, Logout and Shutdown actions.
+### Accent palette
+
+Three soft accents replace the original Adapta accent colours, applied consistently across
+GTK, Metacity and the Cinnamon shell:
+
+| Accent | Normal / Hover | Active / Pressed | Used for |
+| --- | --- | --- | --- |
+| Sky blue | `#38BDF8` | `#0284C7` | Minimize button, Lock action, active panel window, toggles |
+| Soft purple | `#8B5CF6` | `#7C3AED` | Maximize / Restore button, Logout action, tabs, categories |
+| Raspberry pink | `#EC4899` | `#DB2777` | Close button, Shutdown action, critical actions |
+
+Dark surface: `rgba(30, 41, 59, 0.97)` — 97% opacity keeps text fully legible while retaining
+a hint of transparency. Derived variants: `0.85` (panel, panel corners) and `0.6` (secondary
+surfaces).
+
+### What was changed
+
+- **Window titlebar & controls**: accent hover colours on the CSD titlebuttons (GTK 3.0 / 3.22 / 4.0)
+  and on the server-side decorations (`metacity-1/*_prelight.svg`), with regenerated white glyph
+  assets (dash, square, cross).
+- **Start menu & panel**: softer dark surfaces at 97% opacity, updated shell SVG assets.
+- **Panel window list**: the active window is strongly contrasted — tinted background, 1px accent
+  border, 3px accent underline and bold white label.
+- **System buttons**: Lock (sky blue), Logout (soft purple), Shutdown (raspberry pink), with icon
+  centring fixed for Clutter St CSS.
 
 ## Installation
 
@@ -58,6 +80,15 @@ sudo ln -s ~/.themes/Adapta-Nokto-Agy /usr/local/share/themes/
 
 ## Compatibility
 
-This theme is compatible with Cinnamon versions:
-- `3.2.x` to `6.6.x`+
-- GTK `3.20.x`+ and GTK `4.0`
+| Component | Supported | Notes |
+| --- | --- | --- |
+| Cinnamon | `4.4.x` → `6.6.x`+ | Shell stylesheet in `cinnamon/` |
+| GTK 3 | `3.22` → `3.24` | Single `gtk-3.22/` directory; GTK 3 is frozen at 3.24 |
+| GTK 4 | `4.0`+ | `gtk-4.0/`; libadwaita apps override most of it |
+| GTK 2 | `2.24` | `gtk-2.0/`, requires the `murrine` and `pixmap` engines |
+| Muffin / Metacity | theme format 3 | `metacity-1/metacity-theme-3.xml` |
+
+Cinnamon 4.4 is the floor because it is the oldest release whose distributions ship
+GTK ≥ 3.22. Support for GTK < 3.22 (the old `gtk-3.0/` directory) was dropped, as GTK 3
+resolves a theme by walking `gtk-3.<minor>` downwards from its own minor version and
+therefore never reaches `gtk-3.0` on any supported system.

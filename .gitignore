@@ -30,3 +30,11 @@ __pycache__/
 # Local Project Memory
 PROJECT_MEMORY.md
 *.memory.md
+
+# Local analysis tooling (contient l'URL et les exclusions de l'instance SonarQube locale)
+sonar-project.properties
+.scannerwork/
+
+# Traces de debug (strace, stderr GTK)
+*.trace
+*.err
