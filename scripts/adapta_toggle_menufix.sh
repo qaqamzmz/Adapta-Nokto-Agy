@@ -3,11 +3,11 @@ if [ ! -t 1 ]; then
     exit
 fi
 THEMENAME="Adapta-Nokto-Agy";
-DIRECTORY="/home/$USER/.themes/$THEMENAME/cinnamon/";
+DIRECTORY="$HOME/.themes/$THEMENAME/cinnamon/";
 MENUDEFAULT=".menu-selected-app-box {}"
 MENUFIX=".menu-selected-app-box {margin-bottom: 1.09em;}"
 cd "$DIRECTORY" || exit;
-if ! grep -q "$THEMENAME" cinnamon.css; then
+if ! grep -Fq "$THEMENAME" cinnamon.css; then
     echo "There is a problem. Cannot find the cinnamon.css file for $THEMENAME in $DIRECTORY.";
     echo "The script should only be used with $THEMENAME.";
     echo "";
@@ -17,7 +17,7 @@ fi
 if grep -Fq "$MENUDEFAULT" cinnamon.css; then
     sed -i "s|$MENUDEFAULT|$MENUFIX|g" cinnamon.css;
     MESSAGE="Menu app description fix applied."
-elif grep -q "$MENUFIX" cinnamon.css; then
+elif grep -Fq "$MENUFIX" cinnamon.css; then
     sed -i "s|$MENUFIX|$MENUDEFAULT|g" cinnamon.css;
     MESSAGE="Menu app description fix reverted."
 else 

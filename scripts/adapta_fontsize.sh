@@ -3,7 +3,7 @@ if [ ! -t 1 ]; then
     exit
 fi
 THEMENAME="Adapta-Nokto-Agy";
-DIRECTORY="/home/$USER/.themes/$THEMENAME/cinnamon/";
+DIRECTORY="$HOME/.themes/$THEMENAME/cinnamon/";
 SYSTEMFONT="stage { color: #CFD8DC; font-weight: 400; }";
 SYSTEMFONTDESC="System controlled";
 SMALLFONT="stage { font-size: 8pt; color: #CFD8DC; font-family: Roboto, Sans-Serif; font-weight: 400; }";
@@ -20,7 +20,7 @@ cd "$DIRECTORY" || exit;
 echo "";
 echo "*** ADAPTA CINNAMON DESKTOP THEME FONT UTILITY ***";
 echo "";
-if ! grep -q "$THEMENAME" cinnamon.css; then
+if ! grep -Fq "$THEMENAME" cinnamon.css; then
     echo "There is a problem. Cannot find the cinnamon.css file for $THEMENAME in $DIRECTORY.";
     echo "The script should only be used with $THEMENAME.";
     echo "";
@@ -30,19 +30,19 @@ fi
 if grep -Fq "$SYSTEMFONTDESC" cinnamon.css && grep -Fq "$SYSTEMFONT" cinnamon.css; then
     CURRENTDESC="$SYSTEMFONTDESC"; CURRENTFONT="$SYSTEMFONT";
     VARIANT=("$SMALLFONTDESC" "$STANDARDFONTDESC" "$LARGEFONTDESC" "$VLARGEFONTDESC" "$LARGESTFONTDESC" "Quit");
-elif grep -q "$SMALLFONTDESC" cinnamon.css && grep -q "$SMALLFONT" cinnamon.css; then
+elif grep -Fq "$SMALLFONTDESC" cinnamon.css && grep -Fq "$SMALLFONT" cinnamon.css; then
     CURRENTDESC="$SMALLFONTDESC"; CURRENTFONT="$SMALLFONT";
     VARIANT=("$SYSTEMFONTDESC" "$STANDARDFONTDESC" "$LARGEFONTDESC" "$VLARGEFONTDESC" "$LARGESTFONTDESC" "Quit");
-elif grep -q "$STANDARDFONTDESC" cinnamon.css && grep -q "$STANDARDFONT" cinnamon.css; then
+elif grep -Fq "$STANDARDFONTDESC" cinnamon.css && grep -Fq "$STANDARDFONT" cinnamon.css; then
     CURRENTDESC="$STANDARDFONTDESC"; CURRENTFONT="$STANDARDFONT";
     VARIANT=("$SYSTEMFONTDESC" "$SMALLFONTDESC" "$LARGEFONTDESC" "$VLARGEFONTDESC" "$LARGESTFONTDESC" "Quit");
-elif grep -q "$LARGEFONTDESC" cinnamon.css && grep -q "$LARGEFONT" cinnamon.css; then
+elif grep -Fq "$LARGEFONTDESC" cinnamon.css && grep -Fq "$LARGEFONT" cinnamon.css; then
     CURRENTDESC="$LARGEFONTDESC"; CURRENTFONT="$LARGEFONT";
     VARIANT=("$SYSTEMFONTDESC" "$SMALLFONTDESC" "$STANDARDFONTDESC" "$VLARGEFONTDESC" "$LARGESTFONTDESC" "Quit");
-elif grep -q "$VLARGEFONTDESC" cinnamon.css && grep -q "$VLARGEFONT" cinnamon.css; then
+elif grep -Fq "$VLARGEFONTDESC" cinnamon.css && grep -Fq "$VLARGEFONT" cinnamon.css; then
     CURRENTDESC="$VLARGEFONTDESC"; CURRENTFONT="$VLARGEFONT";
     VARIANT=("$SYSTEMFONTDESC" "$SMALLFONTDESC" "$STANDARDFONTDESC" "$LARGEFONTDESC" "$LARGESTFONTDESC" "Quit");
-elif grep -q "$LARGESTFONTDESC" cinnamon.css && grep -q "$LARGESTFONT" cinnamon.css; then
+elif grep -Fq "$LARGESTFONTDESC" cinnamon.css && grep -Fq "$LARGESTFONT" cinnamon.css; then
     CURRENTDESC="$LARGESTFONTDESC"; CURRENTFONT="$LARGESTFONT";
     VARIANT=("$SYSTEMFONTDESC" "$SMALLFONTDESC" "$STANDARDFONTDESC" "$LARGEFONTDESC" "$VLARGEFONTDESC" "Quit");
 else

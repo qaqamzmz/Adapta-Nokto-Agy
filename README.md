@@ -43,7 +43,7 @@ surfaces).
 
 ### What was changed
 
-- **Window titlebar & controls**: accent hover colours on the CSD titlebuttons (GTK 3.0 / 3.22 / 4.0)
+- **Window titlebar & controls**: accent hover colours on the CSD titlebuttons (GTK 3.22 / 4.0)
   and on the server-side decorations (`metacity-1/*_prelight.svg`), with regenerated white glyph
   assets (dash, square, cross).
 - **Start menu & panel**: softer dark surfaces at 97% opacity, updated shell SVG assets.

@@ -305,37 +305,27 @@ Pour forcer un état sans souris :
 
 ## SonarQube
 
-Instance locale : `https://localhost:8443/dashboard?id=Adapta-Nokto-Agy` (certificat auto-signé → `curl -k`).
+Instance locale : `http://localhost:9000/dashboard?id=Adapta-Nokto-Agy` (configuration locale dans `.env.local` et `sonar-project.properties`, tous deux exclus par `.gitignore`).
 
-État : **Quality Gate OK**, mais 26 000 « bugs » et 1 566 code smells sur 26 778 ncloc.
-**Ce sont des faux positifs quasi intégraux** : l'analyseur CSS de Sonar juge du CSS web, alors que le
-projet contient du CSS GTK et du CSS Clutter/St.
+État : **Quality Gate OK**, **0 vulnérabilité**, **0 Security Hotspot**, **0 doublon de propriété (`css:S4656`)**, **0 sélecteur dupliqué (`css:S4666`)**.
+Les issues restantes (~595 bugs et ~60 code smells sur `cinnamon/cinnamon.css`) sont des **faux positifs structurels** : l'analyseur CSS de Sonar juge du CSS web W3C, alors que le projet utilise du CSS Clutter/St et des fonds translucides (`rgba(...)`) posés sur un fond sombre `#1E293B`.
 
 | Règle | Nb | Verdict |
 |---|---|---|
-| `css:S4670` Selectors should be known | 21 291 | Faux positif — widgets GTK/St (`StButton`, `.csd`, `headerbar`) |
-| `css:S4659` Pseudo-class selectors should be valid | 4 298 | Faux positif — `:backdrop`, `:selected`, `:insensitive` |
-| `css:S1874` Deprecated CSS features | 911 | Faux positif — syntaxe GTK legacy volontaire |
-| `css:S4666` Selectors should not be duplicated | 457 | Bruit — sortie du générateur SASS |
-| `css:S4654` CSS properties should be valid | 257 | Faux positif — propriétés propriétaires GTK/St |
-| `css:S7924` Contraste texte/fond insuffisant | 197 | **Seule catégorie à examiner** — accessibilité réelle |
+| `css:S4670` Selectors should be known | 225 | Faux positif — widgets St (`StButton`, `StIcon`, `StLabel`, `stage`) |
+| `css:S4659` Pseudo-class selectors should be valid | 204 | Faux positif — `:selected`, `:insensitive`, `:outlined`, `:ltr` |
+| `css:S4654` CSS properties should be valid | 166 | Faux positif — propriétés propriétaires St (`spacing`, `-slider-*`) |
+| `css:S7924` Contraste texte/fond insuffisant | 60 | Faux positif majoritaire — calculé sur fond blanc au lieu de `rgba(30, 41, 59, 0.97)` |
+| `css:S4658` Empty block | 1 | Faux positif intentionnel — `.menu-selected-app-box {}` est le marqueur `sed` de `scripts/adapta_toggle_menufix.sh` |
 
-Répartition au moment de l'analyse : `gtk-3.22/gtk.css` 10 645, `gtk-4.0/gtk.css` 10 638,
-`gtk-3.0/gtk.css` 5 626, `cinnamon/cinnamon.css` 657. **`gtk-3.0/` ayant été supprimé, une
-nouvelle analyse doit tomber à ~21 900 issues** — la baisse ne traduira aucune correction.
-
-**Conséquence pratique** : ne pas « corriger les bugs Sonar ». Les seuls signaux exploitables sont
-`css:S7924` (contraste) sur `cinnamon/cinnamon.css`, et éventuellement `css:S4666` sur les portions
-écrites à la main. Il n'y a pas de `sonar-project.properties` — à ajouter avec des exclusions
-(`gtk-2.0/**`, `gtk-3.22/**`, `gtk-4.0/**`) si l'analyse doit redevenir utile — il ne resterait
-alors que `cinnamon/cinnamon.css`, le seul fichier écrit à la main.
+**Conséquence pratique** : ne pas « corriger les bugs Sonar » liés aux règles `S4670`, `S4659`, `S4654` et `S4658`. Le fichier local `sonar-project.properties` exclut `gtk-2.0/**`, `gtk-3.22/**`, `gtk-4.0/**`, `**/*.png`, `**/*.svg` et `metacity-1/metacity-theme-3.xml` pour cibler uniquement `cinnamon/cinnamon.css` et éviter les faux positifs sur les feuilles GTK générées par SASS.
 
 Requêtes API :
 
 ```bash
-SQ="<your-sonar-token>"   # token analyst global
-curl -sk -u "$SQ:" "https://localhost:8443/api/measures/component?component=Adapta-Nokto-Agy&metricKeys=bugs,code_smells,ncloc"
-curl -sk -u "$SQ:" "https://localhost:8443/api/issues/search?componentKeys=Adapta-Nokto-Agy&rules=css:S7924&ps=50"
+source .env.local
+curl -s -u "$token_user:" "$url/api/measures/component?component=Adapta-Nokto-Agy&metricKeys=bugs,code_smells,vulnerabilities,security_hotspots,ncloc"
+curl -s -u "$token_user:" "$url/api/issues/search?componentKeys=Adapta-Nokto-Agy&rules=css:S4656,css:S4666,css:S7924&ps=50"
 ```
 
 ## Conventions
