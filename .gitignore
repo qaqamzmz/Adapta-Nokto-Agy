@@ -38,3 +38,7 @@ sonar-project.properties
 # Traces de debug (strace, stderr GTK)
 *.trace
 *.err
+
+# Environment & Credentials
+.env
+.env.*
